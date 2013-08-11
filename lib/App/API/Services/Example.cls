@@ -1,6 +1,11 @@
 Class App.API.Service.Example Extends %RegisteredObject
 {
 
+ClassMethod hasAccess() As %Boolean
+{
+	quit 1
+}
+
 ClassMethod fetchPerson(ByRef output As %ArrayOfDataTypes)
 {
 	if (+%request.Get("id")=1) 

@@ -64,6 +64,11 @@ ClassMethod checkServiceAccess(service As %String) As %Boolean
 	{
 		throw ##class(%Exception.General).%New("Invalid service """_service_""" requested.")
 	}
+	set serviceObj = ..serviceFactory(service)
+	if 'serviceObj.hasAccess()
+	{
+		throw ##class(%Exception.General).%New("You do not have access to the """_service_""" service.")	
+	}
 }
 
 /**
