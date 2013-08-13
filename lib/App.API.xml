@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Export generator="Cache" version="25" zv="Cache for Windows (x86-32) 2013.1.1 (Build 501.1U)" ts="2013-08-13 21:24:44">
+<Class name="App.API">
+<Description>
+The App.API class provides a RESTful API layer that returns JSON encoded data</Description>
+<Super>%CSP.Page</Super>
+<TimeChanged>63047,71131.725394</TimeChanged>
+<TimeCreated>63045,74413.092143</TimeCreated>
+
+<Method name="OnPage">
+<ClassMethod>1</ClassMethod>
+<ReturnType>%Status</ReturnType>
+<Implementation><![CDATA[
+	try	{
+		
+		// Ensure the user has access to the API
+		do ..checkAPIAccess()
+	
+		set controller = ##class(App.API.Controller).%New()
+	
+		// Ensure the user has access to the requested service and that the service is valid
+		do controller.checkServiceAccess(service)
+		
+		set data = controller.handleRequest(%request.Get("service"), %request.Get("action"))
+	
+		if ($data(data)) {
+			// JSON encode the data, and write it to the response body 
+			write ##class(App.API.Helper.CacheJSON).Encode(data)
+		}
+	}
+	catch (exception) {
+		// Return an error status/response if an exception was thrown
+		write "{""status"": ""error"", ""message"": """_exception.Name_"""}"
+	}
+	quit $$$OK
+]]></Implementation>
+</Method>
+
+<Method name="OnPreHTTP">
+<ClassMethod>1</ClassMethod>
+<ReturnType>%Boolean</ReturnType>
+<Implementation><![CDATA[
+	// Set the content type to text/json
+	do %response.SetHeader("Content-Type","text/json")
+	quit 1
+]]></Implementation>
+</Method>
+
+<UDLText name="T">
+<Content><![CDATA[
+/**
+ * Determines if the user has access to the API
+ */
+]]></Content>
+</UDLText>
+
+<Method name="checkAPIAccess">
+<ClassMethod>1</ClassMethod>
+<ReturnType>%Boolean</ReturnType>
+<Implementation><![CDATA[
+	if (%session.NewSession = 1) {
+		// TODO: destroy the session
+		throw ##class(%Exception.General).%New("API access denied.")
+	}
+]]></Implementation>
+</Method>
+</Class>
+</Export>
