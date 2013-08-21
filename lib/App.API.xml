@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Export generator="Cache" version="25" zv="Cache for Windows (x86-32) 2013.1.1 (Build 501)" ts="2013-08-21 15:28:07">
+<Export generator="Cache" version="25" zv="Cache for Windows (x86-64) 2013.1.1 (Build 501)" ts="2013-08-21 16:05:45">
 <Class name="App.API">
 <Description>
 The App.API class provides a RESTful API layer that returns JSON encoded data</Description>
 <Super>%CSP.Page</Super>
-<TimeChanged>63055,55518.513379</TimeChanged>
+<TimeChanged>63055,57921.991869</TimeChanged>
 <TimeCreated>63045,74413.092143</TimeCreated>
 
 <Method name="OnPage">
@@ -22,15 +22,27 @@ The App.API class provides a RESTful API layer that returns JSON encoded data</D
 		do controller.checkServiceAccess(%request.Get("service"))
 		
 		set data = controller.handleRequest(%request.Get("service"), %request.Get("action"))
-	
+
 		if ($data(data)) {
+			
+			set payload = ##class(%ArrayOfDataTypes).%New()
+			do payload.SetAt(1, "success")
+			do payload.SetAt(data, "data")
+			
 			// JSON encode the data, and write it to the response body 
-			write ##class(App.API.Helper.CacheJSON).Encode(data)
+			write ##class(App.API.Helper.CacheJSON).Encode(payload)
 		}
 	}
 	catch (exception) {
 		// Return an error status/response if an exception was thrown
-		write "{""status"": ""error"", ""message"": """_exception.Name_"""}"
+		set payload = ##class(%ArrayOfDataTypes).%New()
+		do payload.SetAt(0, "success")
+		do payload.SetAt("error", "status")
+		do payload.SetAt(exception.Name, "message")
+		do payload.SetAt(exception.Location, "location")
+			
+		// JSON encode the data, and write it to the response body 
+		write ##class(App.API.Helper.CacheJSON).Encode(payload)
 	}
 	quit $$$OK
 ]]></Implementation>
@@ -59,7 +71,7 @@ The App.API class provides a RESTful API layer that returns JSON encoded data</D
 <ReturnType>%Boolean</ReturnType>
 <Implementation><![CDATA[
 	if (%session.NewSession = 1) {
-		// TODO: destroy the session
+		Set %session.EndSession =1
 		throw ##class(%Exception.General).%New("API access denied.")
 	}
 ]]></Implementation>
