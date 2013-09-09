@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Export generator="Cache" version="25" zv="Cache for Windows (x86-32) 2013.1.1 (Build 501)" ts="2013-09-09 15:21:49">
+<Class name="App.API.ServiceSecurity">
+<Super>%RegisteredObject</Super>
+<TimeChanged>63047,70511.918142</TimeChanged>
+<TimeCreated>63047,70480.92945</TimeCreated>
+
+<Method name="grantAccess">
+<ClassMethod>1</ClassMethod>
+<FormalSpec>service:%String</FormalSpec>
+<Implementation><![CDATA[	set %session.Data("api_service_access", service)=""
+]]></Implementation>
+</Method>
+
+<Method name="hasAccess">
+<ClassMethod>1</ClassMethod>
+<FormalSpec>service:%String</FormalSpec>
+<ReturnType>%Boolean</ReturnType>
+<Implementation><![CDATA[
+	set allowedService = $order(%session.Data("api_service_access", ""))
+	while (allowedService'="") {
+		if (allowedService=service) {
+			quit
+		}
+		set allowedService = $order(%session.Data("api_service_access", allowedService))
+	}
+	quit +(allowedService=service)
+]]></Implementation>
+</Method>
+</Class>
+</Export>

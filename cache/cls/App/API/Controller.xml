@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Export generator="Cache" version="25" zv="Cache for Windows (x86-32) 2013.1.1 (Build 501)" ts="2013-09-09 15:21:52">
+<Class name="App.API.Controller">
+<Super>%RegisteredObject</Super>
+<TimeChanged>63055,52478.57228</TimeChanged>
+<TimeCreated>63046,69735.626447</TimeCreated>
+
+<Property name="serviceFactory">
+<Type>%RegisteredObject</Type>
+</Property>
+
+<Method name="%OnNew">
+<ReturnType>%Status</ReturnType>
+<Implementation><![CDATA[
+	set ..serviceFactory = ##class(App.API.Helper.ServiceFactory).%New()
+	quit $$$OK
+]]></Implementation>
+</Method>
+
+<Method name="handleRequest">
+<FormalSpec>service:%String,action:%String</FormalSpec>
+<ReturnType>%AbstractArray</ReturnType>
+<Implementation><![CDATA[
+	// Create an instance of the service that has been requested
+	set service = ..serviceFactory.create(service)
+
+	// Call the requested action of the service instance
+	do $method(service, action, .data)
+
+	quit data
+]]></Implementation>
+</Method>
+
+<UDLText name="T">
+<Content><![CDATA[
+/**
+ * Determine if the user has access to the requested service 
+ * and that the service actually exists
+ */
+]]></Content>
+</UDLText>
+
+<Method name="checkServiceAccess">
+<FormalSpec>service:%String</FormalSpec>
+<ReturnType>%Boolean</ReturnType>
+<Implementation><![CDATA[
+	if ('..serviceFactory.hasService(service)) {
+		throw ##class(%Exception.General).%New("Invalid service """_service_""" requested.")
+	}
+	if ('##class(App.API.ServiceSecurity).hasAccess(service))	{
+		throw ##class(%Exception.General).%New("You do not have access to the """_service_""" service.")
+	}
+	set serviceObj = ..serviceFactory.create(service)
+	if ('serviceObj.hasAccess()) {
+		throw ##class(%Exception.General).%New("You do not have access to the """_service_""" service.")
+	}
+]]></Implementation>
+</Method>
+</Class>
+</Export>

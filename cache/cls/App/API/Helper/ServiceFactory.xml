@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Export generator="Cache" version="25" zv="Cache for Windows (x86-32) 2013.1.1 (Build 501)" ts="2013-09-09 15:22:01">
+<Class name="App.API.Helper.ServiceFactory">
+<Super>%RegisteredObject</Super>
+<TimeChanged>63055,52600.635989</TimeChanged>
+<TimeCreated>63046,75850.513214</TimeCreated>
+
+<Property name="services">
+<Type>%ListOfDataTypes</Type>
+<Private>1</Private>
+</Property>
+
+<Method name="%OnNew">
+<ReturnType>%Status</ReturnType>
+<Implementation><![CDATA[
+	set ..services = ##class(%ListOfDataTypes).%New()
+	do ..services.Insert("Example")
+	do ..services.Insert("Test")
+	quit $$$OK
+]]></Implementation>
+</Method>
+
+<Method name="create">
+<FormalSpec>service:%String</FormalSpec>
+<ReturnType>%RegisteredObject</ReturnType>
+<Implementation><![CDATA[
+	quit $case(service,
+		"Example":##class(App.API.Service.Example).%New(),
+		"Test":##class(App.API.Service.Test).%New())
+]]></Implementation>
+</Method>
+
+<Method name="hasService">
+<FormalSpec>service:%String</FormalSpec>
+<ReturnType>%Boolean</ReturnType>
+<Implementation><![CDATA[	quit ..services.Find(service)
+]]></Implementation>
+</Method>
+</Class>
+</Export>
