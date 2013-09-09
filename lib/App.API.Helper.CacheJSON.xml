@@ -1,7 +1,14 @@
-/// Original code from Yonatan http://blog.yonatan.me/2010/03/objectscript-json-decoderencoder.html
-Class App.API.Helper.CacheJSON Extends %String
-{
+<?xml version="1.0" encoding="UTF-8"?>
+<Export generator="Cache" version="25" zv="Cache for Windows (x86-32) 2013.1.1 (Build 501.1U)" ts="2013-08-13 21:24:45">
+<Class name="App.API.Helper.CacheJSON">
+<Description>
+Original code from Yonatan http://blog.yonatan.me/2010/03/objectscript-json-decoderencoder.html</Description>
+<Super>%String</Super>
+<TimeChanged>63046,75815.413229</TimeChanged>
+<TimeCreated>63046,75815.413229</TimeCreated>
 
+<UDLText name="T">
+<Content><![CDATA[
 /*
 		Original Code By: Yonatan
 		Date: 03/14/2010
@@ -18,53 +25,101 @@ Class App.API.Helper.CacheJSON Extends %String
 					 Added classmethod to return an object loaded with the properties from an encoded JSON string.
 			
 	*/
-Parameter EscapeChar As COSEXPRESSION = "$LB($LB(""\"",""\\""),$LB($C(13),""\n""),$LB($C(10),""\r""),$LB($C(9),""\t""),$LB("""""""",""\""""""),$LB($C(8),""\b""),$LB($C(12),""\f""))";
+]]></Content>
+</UDLText>
 
-Parameter UnEscapeChar As COSEXPRESSION = "$LB(""\\"",""\n"",""\r"",""\t"",""\"""""",""\b"",""\f"")";
+<Parameter name="EscapeChar">
+<Type>COSEXPRESSION</Type>
+<Default>$LB($LB("\","\\"),$LB($C(13),"\n"),$LB($C(10),"\r"),$LB($C(9),"\t"),$LB("""","\"""),$LB($C(8),"\b"),$LB($C(12),"\f"))</Default>
+</Parameter>
 
-Parameter JSonSlice [ Final, Internal ] = 1;
+<Parameter name="UnEscapeChar">
+<Type>COSEXPRESSION</Type>
+<Default>$LB("\\","\n","\r","\t","\""","\b","\f")</Default>
+</Parameter>
 
-Parameter JSonInString [ Final, Internal ] = 2;
+<Parameter name="JSonSlice">
+<Final>1</Final>
+<Internal>1</Internal>
+<Default>1</Default>
+</Parameter>
 
-Parameter JSonInArray [ Final, Internal ] = 3;
+<Parameter name="JSonInString">
+<Final>1</Final>
+<Internal>1</Internal>
+<Default>2</Default>
+</Parameter>
 
-Parameter JSonInObject [ Final, Internal ] = 4;
+<Parameter name="JSonInArray">
+<Final>1</Final>
+<Internal>1</Internal>
+<Default>3</Default>
+</Parameter>
 
-ClassMethod GetEscapeChars() As %String
-{
-  Quit ..#EscapeChar
-}
+<Parameter name="JSonInObject">
+<Final>1</Final>
+<Internal>1</Internal>
+<Default>4</Default>
+</Parameter>
 
-ClassMethod SetAux(what As %String, where As %Integer, delim As %String) As %DataType [ Internal ]
-{
+<Method name="GetEscapeChars">
+<ClassMethod>1</ClassMethod>
+<ReturnType>%String</ReturnType>
+<Implementation><![CDATA[  Quit ..#EscapeChar
+]]></Implementation>
+</Method>
+
+<Method name="SetAux">
+<Internal>1</Internal>
+<ClassMethod>1</ClassMethod>
+<FormalSpec>what:%String,where:%Integer,delim:%String</FormalSpec>
+<ReturnType>%DataType</ReturnType>
+<Implementation><![CDATA[
   s aux=##class(%ArrayOfDataTypes).%New() 
   d aux.SetAt(what,"what")
   d aux.SetAt(where,"where") 
   d aux.SetAt(delim,"delim")
  
   q aux
-}
+]]></Implementation>
+</Method>
 
-/// we know that it's not escaped becase there is _not_ an
-/// odd number of backslashes at the end of the string so far
-ClassMethod isEscaped(str As %String, c As %String) As %Boolean [ Internal ]
-{
+<Method name="isEscaped">
+<Description>
+we know that it's not escaped becase there is _not_ an
+odd number of backslashes at the end of the string so far</Description>
+<Internal>1</Internal>
+<ClassMethod>1</ClassMethod>
+<FormalSpec>str:%String,c:%String</FormalSpec>
+<ReturnType>%Boolean</ReturnType>
+<Implementation><![CDATA[
   s pos=$F(str,c)
   q ($L($E(str,1,pos))-$L($REPLACE($E(str,1,pos),"\","")))#2=1
-}
+]]></Implementation>
+</Method>
 
-/// Escapes the string. 
-ClassMethod Escape(str As %String) As %String [ Internal ]
-{
+<Method name="Escape">
+<Description>
+Escapes the string. </Description>
+<Internal>1</Internal>
+<ClassMethod>1</ClassMethod>
+<FormalSpec>str:%String</FormalSpec>
+<ReturnType>%String</ReturnType>
+<Implementation><![CDATA[
   for tI=1:1:$LL(..#EscapeChar) { 
     Set tCharPair=$LG(..#EscapeChar,tI)
     Set str=$Replace(str,$LG(tCharPair,1),$LG(tCharPair,2))
   }
   Quit str
-}
+]]></Implementation>
+</Method>
 
-ClassMethod Unescape(str As %String) As %String [ Internal ]
-{
+<Method name="Unescape">
+<Internal>1</Internal>
+<ClassMethod>1</ClassMethod>
+<FormalSpec>str:%String</FormalSpec>
+<ReturnType>%String</ReturnType>
+<Implementation><![CDATA[
   For tI=1:1:$Length(str){
     Set tChar=$ListFind(..#UnEscapeChar,$E(str,tI,tI+1))
     if (tChar>0){
@@ -72,11 +127,16 @@ ClassMethod Unescape(str As %String) As %String [ Internal ]
     }
   }
   Quit str
-}
+]]></Implementation>
+</Method>
 
-/// Decode a string JSON. 
-ClassMethod Decode(str As %String) As %ArrayOfDataTypes
-{
+<Method name="Decode">
+<Description>
+Decode a string JSON. </Description>
+<ClassMethod>1</ClassMethod>
+<FormalSpec>str:%String</FormalSpec>
+<ReturnType>%ArrayOfDataTypes</ReturnType>
+<Implementation><![CDATA[
   #dim stack as %ListOfDataTypes
   s matchType=$ZCVT(str,"L")
  
@@ -197,11 +257,16 @@ ClassMethod Decode(str As %String) As %ArrayOfDataTypes
     }
   }
   q str
-}
+]]></Implementation>
+</Method>
 
-/// Encode a Cache string to a JSON string
-ClassMethod Encode(data As %DataType) As %String
-{
+<Method name="Encode">
+<Description>
+Encode a Cache string to a JSON string</Description>
+<ClassMethod>1</ClassMethod>
+<FormalSpec>data:%DataType</FormalSpec>
+<ReturnType>%String</ReturnType>
+<Implementation><![CDATA[
 
   if $IsObject(data) {  
     s key=""
@@ -251,27 +316,40 @@ ClassMethod Encode(data As %DataType) As %String
     q:data="" "null"
     q """"_..Escape(data)_""""
   }
-}
+]]></Implementation>
+</Method>
 
-ClassMethod CreateStringPair(pKey As %String, pValue As %String) As %String
-{
-  Quit """"_pKey_""":"""_..Escape(pValue)_""""
-}
+<Method name="CreateStringPair">
+<ClassMethod>1</ClassMethod>
+<FormalSpec>pKey:%String,pValue:%String</FormalSpec>
+<ReturnType>%String</ReturnType>
+<Implementation><![CDATA[  Quit """"_pKey_""":"""_..Escape(pValue)_""""
+]]></Implementation>
+</Method>
 
-ClassMethod Parse(pStr As App.API.Helper.CacheJSON) As %ArrayOfDataTypes
-{
-  Quit ##class(App.API.Helper.CacheJSON).Decode(pStr)
-}
+<Method name="Parse">
+<ClassMethod>1</ClassMethod>
+<FormalSpec>pStr:App.API.Helper.CacheJSON</FormalSpec>
+<ReturnType>%ArrayOfDataTypes</ReturnType>
+<Implementation><![CDATA[  Quit ##class(App.API.Helper.CacheJSON).Decode(pStr)
+]]></Implementation>
+</Method>
 
-ClassMethod Stringify(pData As %DataType) As App.API.Helper.CacheJSON
-{
-  Quit ##class(App.API.Helper.CacheJSON).Encode(pData)
-}
+<Method name="Stringify">
+<ClassMethod>1</ClassMethod>
+<FormalSpec>pData:%DataType</FormalSpec>
+<ReturnType>App.API.Helper.CacheJSON</ReturnType>
+<Implementation><![CDATA[  Quit ##class(App.API.Helper.CacheJSON).Encode(pData)
+]]></Implementation>
+</Method>
 
-/// Return an encoded JSON string of the object.<br>
-/// Uses all object properties that do not start with a % char.
-Method GetJSONFromObject() As %String [ CodeMode = objectgenerator ]
-{
+<Method name="GetJSONFromObject">
+<Description><![CDATA[
+Return an encoded JSON string of the object.<br>
+Uses all object properties that do not start with a % char.]]></Description>
+<CodeMode>objectgenerator</CodeMode>
+<ReturnType>%String</ReturnType>
+<Implementation><![CDATA[
 	// Only create this method when compiling other classes this is extended upon
 	If (%compiledclass.Name '= "Spectrum.Util.CacheJSON") {
 		
@@ -290,13 +368,17 @@ Method GetJSONFromObject() As %String [ CodeMode = objectgenerator ]
 	    // Return an encoded JSON string of the object
 	    Do %code.WriteLine(" Quit ..Encode(array)")
 	}
-}
+]]></Implementation>
+</Method>
 
-/// Returns the object as an %ArrayOfDataTypes key=>value pair set.
-/// This is helpful when trying to return a %ListOfDataTypes in JSON form, by quickly building an array object to Insert.
-/// Uses all object properties that do not start with a % char.
-Method GetAsArrayOfDataTypes() As %ArrayOfDataTypes [ CodeMode = objectgenerator ]
-{
+<Method name="GetAsArrayOfDataTypes">
+<Description><![CDATA[
+Returns the object as an %ArrayOfDataTypes key=>value pair set.
+This is helpful when trying to return a %ListOfDataTypes in JSON form, by quickly building an array object to Insert.
+Uses all object properties that do not start with a % char.]]></Description>
+<CodeMode>objectgenerator</CodeMode>
+<ReturnType>%ArrayOfDataTypes</ReturnType>
+<Implementation><![CDATA[
 	// Only create this method when compiling other classes this is extended upon
 	If (%compiledclass.Name '= "Spectrum.Util.CacheJSON") {
 		
@@ -315,12 +397,18 @@ Method GetAsArrayOfDataTypes() As %ArrayOfDataTypes [ CodeMode = objectgenerator
 	    // Return an %ArrayOfDataTypes representation of the object
 	    Do %code.WriteLine(" Quit array")
 	}
-}
+]]></Implementation>
+</Method>
 
-/// Returns an OREF populated with the values from the JSON
-/// Uses all object properties that do not start with a % char.
-ClassMethod GetObjectFromJSON(JSON As %String) As %RegisteredObject [ CodeMode = objectgenerator ]
-{
+<Method name="GetObjectFromJSON">
+<Description>
+Returns an OREF populated with the values from the JSON
+Uses all object properties that do not start with a % char.</Description>
+<ClassMethod>1</ClassMethod>
+<CodeMode>objectgenerator</CodeMode>
+<FormalSpec>JSON:%String</FormalSpec>
+<ReturnType>%RegisteredObject</ReturnType>
+<Implementation><![CDATA[
 	// Only create this method when compiling other classes this is extended upon
 	If (%compiledclass.Name '= "Spectrum.Util.CacheJSON") {
 		Do %code.WriteLine(" Set return = ##class("_%compiledclass.Name_").%New()")
@@ -339,6 +427,7 @@ ClassMethod GetObjectFromJSON(JSON As %String) As %RegisteredObject [ CodeMode =
 	    
 		Do %code.WriteLine(" Quit return")
 	}
-}
-
-}
+]]></Implementation>
+</Method>
+</Class>
+</Export>
