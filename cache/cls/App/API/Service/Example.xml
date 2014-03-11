@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Export generator="Cache" version="25" zv="Cache for Windows (x86-32) 2013.1.1 (Build 501)" ts="2013-09-09 15:30:50">
+<Export generator="Cache" version="25" zv="Cache for Windows (x86-64) 2013.1.1 (Build 501)" ts="2014-03-10 16:02:19">
 <Class name="App.API.Service.Example">
 <Super>%RegisteredObject</Super>
-<TimeChanged>63074,55834.051069</TimeChanged>
+<TimeChanged>63256,57375.248865</TimeChanged>
 <TimeCreated>63045,73785.170534</TimeCreated>
 
 <Method name="hasAccess">
+<Description>
+Allows application-level security to be enforced on this service
+For example, you could check the user's application role to determine
+if they have access to the functionality offered by this service.</Description>
 <ClassMethod>1</ClassMethod>
 <ReturnType>%Boolean</ReturnType>
 <Implementation><![CDATA[	quit 1
@@ -13,6 +17,9 @@
 </Method>
 
 <Method name="fetchPerson">
+<Description>
+Example method that uses a GET paramter and returned a single object.
+Fetches a person by a given ID.</Description>
 <ClassMethod>1</ClassMethod>
 <ReturnType>%ArrayOfDataTypes</ReturnType>
 <Implementation><![CDATA[
@@ -35,6 +42,9 @@
 </Method>
 
 <Method name="fetchPeople">
+<Description>
+Example method that returns an array of objects.
+Fetches all people related to this service.</Description>
 <ClassMethod>1</ClassMethod>
 <ReturnType>%ListOfDataTypes</ReturnType>
 <Implementation><![CDATA[

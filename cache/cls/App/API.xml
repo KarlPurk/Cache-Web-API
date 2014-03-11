@@ -32,7 +32,6 @@ service classes - such as encoding the response as a JSON packet.
 		
 		// Ask the controller to handle the request and return the response
 		set data = controller.handleRequest(%request.Get("service"), %request.Get("action"))
-
 			
 		set payload = ##class(%ArrayOfDataTypes).%New()
 		do payload.SetAt(1, "success")
