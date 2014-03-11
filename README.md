@@ -75,11 +75,11 @@ Locate and open the `App.API.Helper.ServiceFactory` class.
 
 The first step is to register your service identifier with the API. This identifier does not need to match your Service class name, but for clarity it probably should do. Basically this identifier is what the client will refer to when using your service – this is the name of the Service in the URL call. For example:
 
-(http://chft-pasdev:57774/csp/ewd/App.API.cls?service=Blog&action=fetchPosts)
+[http://chft-pasdev:57774/csp/ewd/App.API.cls?service=Blog&action=fetchPosts](http://chft-pasdev:57774/csp/ewd/App.API.cls?service=Blog&action=fetchPosts)
 
 The above URL specifies the Blog service – this is the service identifier. This could be anything, such as MyBlog, KarlsBlog, etc. Generally though, it should match the name of your service. This identifier could also be packaged, such as Blog.Posts:
 
-(http://chft-pasdev:57774/csp/ewd/App.API.cls?service=Blog.Posts&action=fetchPosts)
+[http://chft-pasdev:57774/csp/ewd/App.API.cls?service=Blog.Posts&action=fetchPosts](http://chft-pasdev:57774/csp/ewd/App.API.cls?service=Blog.Posts&action=fetchPosts)
 
     To register an identifier for a service, add the following code:
 
@@ -208,14 +208,14 @@ In the App.API.Service package there is an example service class called App.API.
 
 This end point shows an example of how to return a JSON array from an API service.  You can see the response from this service by pasting the following URL into your browser:
 
-(http://chft-pasdev:57774/csp/ewd/App.API.cls?service=Example&action=fetchPeople)
+[http://chft-pasdev:57774/csp/ewd/App.API.cls?service=Example&action=fetchPeople](http://chft-pasdev:57774/csp/ewd/App.API.cls?service=Example&action=fetchPeople)
 
 ### fetchPerson End Point
    
 This end point shows an example of how to return a single JSON object from an API service.  You can see the response from this service by pasting the following URL into your browser:
     
-(http://chft-pasdev:57774/csp/ewd/App.API.cls?service=Example&action=fetchPerson&id=1)
+[http://chft-pasdev:57774/csp/ewd/App.API.cls?service=Example&action=fetchPerson&id=1](http://chft-pasdev:57774/csp/ewd/App.API.cls?service=Example&action=fetchPerson&id=1)
     
 You can also change the id parameter to the value 2 to return a different person:
     
-(http://chft-pasdev:57774/csp/ewd/App.API.cls?service=Example&action=fetchPerson&id=2)
+[http://chft-pasdev:57774/csp/ewd/App.API.cls?service=Example&action=fetchPerson&id=2](http://chft-pasdev:57774/csp/ewd/App.API.cls?service=Example&action=fetchPerson&id=2)
