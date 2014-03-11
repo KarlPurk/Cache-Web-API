@@ -1,8 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Export generator="Cache" version="25" zv="Cache for Windows (x86-32) 2013.1.1 (Build 501)" ts="2013-09-09 15:21:49">
+<Export generator="Cache" version="25" zv="Cache for Windows (x86-64) 2013.1.1 (Build 501)" ts="2014-03-10 16:01:40">
 <Class name="App.API.ServiceSecurity">
+<Description>
+------------------------------------------------------------------------------
+Author: Karl Purkhardt
+Last Update: 10/03/2013
+------------------------------------------------------------------------------
+The App.API.ServiceSecurity class is responsible for granting access to, and
+checking access for, API services.  This class is generally called from the 
+index.csp page in your application.  From the CSP page you can grant access
+to services for that specific application.  
+The App.API.Controller class utilises this class to ensure that users have 
+access to the services that they are requesting.
+------------------------------------------------------------------------------</Description>
 <Super>%RegisteredObject</Super>
-<TimeChanged>63047,70511.918142</TimeChanged>
+<TimeChanged>63256,57684.431995</TimeChanged>
 <TimeCreated>63047,70480.92945</TimeCreated>
 
 <Method name="grantAccess">
@@ -17,6 +29,11 @@
 <FormalSpec>service:%String</FormalSpec>
 <ReturnType>%Boolean</ReturnType>
 <Implementation><![CDATA[
+	// Always allow access to the Example service
+	if (service = "Example") {
+		quit 1
+	}
+
 	set allowedService = $order(%session.Data("api_service_access", ""))
 	while (allowedService'="") {
 		if (allowedService=service) {
