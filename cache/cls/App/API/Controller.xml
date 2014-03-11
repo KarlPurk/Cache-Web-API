@@ -1,8 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Export generator="Cache" version="25" zv="Cache for Windows (x86-32) 2013.1.1 (Build 501)" ts="2013-09-09 15:31:21">
+<Export generator="Cache" version="25" zv="Cache for Windows (x86-64) 2013.1.1 (Build 501)" ts="2014-03-10 15:58:55">
 <Class name="App.API.Controller">
+<Description>
+------------------------------------------------------------------------------
+Author: Karl Purkhardt
+Last Update: 10/03/2013
+------------------------------------------------------------------------------
+The App.API.Controller class is responsible for handling/processing API 
+requests.  The class encapsulates service objects from the main App.API
+class allowing the App.API to remain decoupled from the API services.
+------------------------------------------------------------------------------</Description>
 <Super>%RegisteredObject</Super>
-<TimeChanged>63074,55881.487081</TimeChanged>
+<TimeChanged>63256,56854.491628</TimeChanged>
 <TimeCreated>63046,69735.626447</TimeCreated>
 
 <Property name="serviceFactory">
@@ -31,28 +40,31 @@
 ]]></Implementation>
 </Method>
 
-<UDLText name="T">
-<Content><![CDATA[
-/**
- * Determine if the user has access to the requested service 
- * and that the service actually exists
- */
-]]></Content>
-</UDLText>
-
 <Method name="checkServiceAccess">
+<Description>
+Determine if the user has access to the requested service 
+and that the service actually exists</Description>
 <FormalSpec>service:%String</FormalSpec>
 <ReturnType>%Boolean</ReturnType>
 <Implementation><![CDATA[
+	// Ensure that the service exists
 	if ('..serviceFactory.hasService(service)) {
-		throw ##class(%Exception.General).%New("Invalid service """_service_""" requested.")
+		throw ##class(App.API.Exception).%New("Invalid service """_service_""" requested.")
 	}
+	
+	// Ensure that the user has access to this service
+	// This ensures that the user has been granted access at the session level.
+	// This is granted via the App.API.ServiceSecurity.grantAccess() method.
 	if ('##class(App.API.ServiceSecurity).hasAccess(service))	{
-		throw ##class(%Exception.General).%New("You do not have access to the """_service_""" service.")
+		throw ##class(App.API.Exception).%New("You do not have access to the """_service_""" service.")
 	}
+	
+	// Ensure that the user is allowed to access the service
+	// This ensures that the user has been allowed access at the application level.
+	// This is controlled inside the service class' hasAccess() method.
 	set serviceObj = ..serviceFactory.create(service)
 	if ('serviceObj.hasAccess()) {
-		throw ##class(%Exception.General).%New("You do not have access to the """_service_""" service.")
+		throw ##class(App.API.Exception).%New("You do not have access to the """_service_""" service.")
 	}
 ]]></Implementation>
 </Method>
