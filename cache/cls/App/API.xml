@@ -1,39 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Export generator="Cache" version="25" zv="Cache for Windows (x86-32) 2013.1.1 (Build 501)" ts="2013-09-09 15:21:34">
+<Export generator="Cache" version="25" zv="Cache for Windows (x86-64) 2013.1.1 (Build 501)" ts="2014-03-11 09:10:18">
 <Class name="App.API">
 <Description>
-The App.API class provides a RESTful API layer that returns JSON encoded data</Description>
+------------------------------------------------------------------------------
+Author: Karl Purkhardt
+Last Update: 10/03/2013
+------------------------------------------------------------------------------
+The App.API class provides Gateway to the underlying server classes.
+This class is responsible for checking API access and forwarding requests
+onto the controller.  It is also responsible for handling the response from
+service classes - such as encoding the response as a JSON packet.
+------------------------------------------------------------------------------</Description>
 <Super>%CSP.Page</Super>
-<TimeChanged>63056,37188.491936</TimeChanged>
+<TimeChanged>63257,32473.844256</TimeChanged>
 <TimeCreated>63045,74413.092143</TimeCreated>
 
 <Method name="OnPage">
 <ClassMethod>1</ClassMethod>
 <ReturnType>%Status</ReturnType>
 <Implementation><![CDATA[
+	
 	try	{
 		
 		// Ensure the user has access to the API
 		do ..checkAPIAccess()
-	
+	    
 		set controller = ##class(App.API.Controller).%New()
 	
 		// Ensure the user has access to the requested service and that the service is valid
 		do controller.checkServiceAccess(%request.Get("service"))
 		
+		// Ask the controller to handle the request and return the response
 		set data = controller.handleRequest(%request.Get("service"), %request.Get("action"))
 
-		if ($data(data)) {
 			
-			set payload = ##class(%ArrayOfDataTypes).%New()
-			do payload.SetAt(1, "success")
-			do payload.SetAt(data, "data")
+		set payload = ##class(%ArrayOfDataTypes).%New()
+		do payload.SetAt(1, "success")
+		do payload.SetAt(data, "data")
 			
-			// JSON encode the data, and write it to the response body 
-			write ##class(App.API.Helper.CacheJSON).Encode(payload)
-		}
+		// JSON encode the data, and write it to the response body 
+		write ##class(App.API.Helper.CacheJSON).Encode(payload)
 	}
 	catch (exception) {
+
 		// Return an error status/response if an exception was thrown
 		set payload = ##class(%ArrayOfDataTypes).%New()
 		do payload.SetAt(0, "success")
@@ -71,8 +80,12 @@ The App.API class provides a RESTful API layer that returns JSON encoded data</D
 <ReturnType>%Boolean</ReturnType>
 <Implementation><![CDATA[
 	if (%session.NewSession = 1) {
-		// TODO: destroy the session
-		throw ##class(%Exception.General).%New("API access denied.")
+		
+		// Destroy the session immediately
+		Set %session.EndSession =1
+		
+		// Throw an access denied exception
+		throw ##class(App.API.Exception).%New("API access denied.")
 	}
 ]]></Implementation>
 </Method>
