@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Export generator="Cache" version="25" zv="Cache for Windows (x86-64) 2013.1.1 (Build 501)" ts="2014-03-10 15:59:01">
+<Class name="App.API.Exception">
+<Super>%Exception.AbstractException</Super>
+<TimeChanged>63232,56584.650924</TimeChanged>
+<TimeCreated>63232,56565.03208</TimeCreated>
+</Class>
+</Export>
