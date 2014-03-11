@@ -1,8 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Export generator="Cache" version="25" zv="Cache for Windows (x86-32) 2013.1.1 (Build 501)" ts="2013-09-09 15:22:01">
+<Export generator="Cache" version="25" zv="Cache for Windows (x86-64) 2013.1.1 (Build 501)" ts="2014-03-10 16:02:04">
 <Class name="App.API.Helper.ServiceFactory">
+<Description>
+------------------------------------------------------------------------------
+Author: Karl Purkhardt
+Last Update: 10/03/2013
+------------------------------------------------------------------------------
+The App.API.Helper.ServiceFactory class is responsible for managing available services.
+For security, any class that should be used as a service needs to be registered
+in this class.  The API.Controller class communiates with this object to determine
+if a service exists, and to gain access to an instance of that service.
+------------------------------------------------------------------------------</Description>
 <Super>%RegisteredObject</Super>
-<TimeChanged>63055,52600.635989</TimeChanged>
+<TimeChanged>63256,57257.86873</TimeChanged>
 <TimeCreated>63046,75850.513214</TimeCreated>
 
 <Property name="services">
@@ -15,22 +25,24 @@
 <Implementation><![CDATA[
 	set ..services = ##class(%ListOfDataTypes).%New()
 	do ..services.Insert("Example")
-	do ..services.Insert("Test")
 	quit $$$OK
 ]]></Implementation>
 </Method>
 
 <Method name="create">
+<Description>
+Create an instace of the specified service</Description>
 <FormalSpec>service:%String</FormalSpec>
 <ReturnType>%RegisteredObject</ReturnType>
 <Implementation><![CDATA[
 	quit $case(service,
-		"Example":##class(App.API.Service.Example).%New(),
-		"Test":##class(App.API.Service.Test).%New())
+		"Example":##class(App.API.Service.Example).%New())
 ]]></Implementation>
 </Method>
 
 <Method name="hasService">
+<Description>
+Determines if the specified service is registered and valid.</Description>
 <FormalSpec>service:%String</FormalSpec>
 <ReturnType>%Boolean</ReturnType>
 <Implementation><![CDATA[	quit ..services.Find(service)
